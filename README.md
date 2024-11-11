@@ -34,7 +34,3 @@ This project sets up an automated data pipeline in Google Cloud Platform (GCP) t
 - Google Cloud Storage Bucket
 - BigQuery Dataset and Table
 
-
-
-## License
-This project is licensed under the MIT License - see the LICENSE file for details. 
