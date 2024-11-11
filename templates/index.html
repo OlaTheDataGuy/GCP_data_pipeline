@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Files</title>
+    <style>
+        /* Reset and Base Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .header {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        .container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+        .file-input-container:hover {
+            background-color: #d0d0d0;
+        }
+        .file-input-container input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+        .drag-area {
+            border: 2px dashed #4CAF50;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            color: #4CAF50;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .drag-area.dragging {
+            background-color: #e0ffe0;
+        }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            overflow: hidden;
+            height: 10px;
+            margin-top: 15px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 0;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>OlaTheDataGuy Data Upload</h1>
+    </div>
+
+    <div class="container">
+        <h2>Upload File to Google Cloud Storage</h2>
+        <form action="/" method="post" enctype="multipart/form-data" onsubmit="startUpload(event)">
+            <div class="drag-area" id="drag-area">
+                Drag & Drop File Here or <span class="file-input-container">Browse
+                <input type="file" name="file" id="file-input" onchange="fileSelected(event)" required>
+                </span>
+            </div>
+            <button type="submit" class="submit-btn">Upload</button>
+            <div class="progress-bar" id="progress-bar">
+                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const dragArea = document.getElementById('drag-area');
+        const progressBar = document.getElementById('progress-bar');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+
+        // Handle Drag and Drop
+        dragArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dragArea.classList.add('dragging');
+        });
+
+        dragArea.addEventListener('dragleave', () => {
+            dragArea.classList.remove('dragging');
+        });
+
+        dragArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dragArea.classList.remove('dragging');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                fileInput.files = e.dataTransfer.files;
+                dragArea.innerText = `File Selected: ${file.name}`;
+            }
+        });
+
+        // Update Drag Area when File is Selected
+        function fileSelected(event) {
+            const file = event.target.files[0];
+            if (file) {
+                dragArea.innerText = `File Selected: ${file.name}`;
+            }
+        }
+
+        // Simulate Progress Bar
+        function startUpload(event) {
+            event.preventDefault();
+            let progress = 0;
+            progressBar.style.display = 'block';
+
+            // Mock progress update
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBarFill.style.width = `${progress}%`;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    alert("File uploaded successfully!");
+                }
+            }, 200);
+        }
+    </script>
+
+</body>
+</html>
+
